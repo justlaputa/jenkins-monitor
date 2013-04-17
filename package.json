@@ -1,0 +1,18 @@
+{
+    "name": "chrome-jenkins",
+    "description": "google-chrome extension of Jenkins",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "jade": "*"
+    },
+    "engines": {
+        "node": "0.8.x",
+        "npm": "1.2.x"
+    },
+    "devDependencies": {
+        "grunt": "0.4.x",
+        "grunt-contrib-jshint": "0.3.x",
+        "grunt-contrib-handlebars": "0.5.x"
+    }
+}

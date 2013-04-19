@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "zepto": "1.0.x",
+    "zepto": "1.0.0",
     "handlebars": "1.0.x"
   }
 }

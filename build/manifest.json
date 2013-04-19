@@ -1,0 +1,14 @@
+{
+  "manifest_version": 2,
+
+  "name": "Jenkins Chrome",
+  "description": "Chrome Extensions for Jenkins.",
+  "version": "1.0",
+
+  "permissions": [
+    "https://ec2-54-251-51-217.ap-southeast-1.compute.amazonaws.com/"
+  ],
+  "browser_action": {
+    "default_popup": "popup.html"
+  }
+}

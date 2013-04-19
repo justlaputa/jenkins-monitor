@@ -1,0 +1,12 @@
+{
+    "jobs": [
+        {
+            "status": "pass",
+            "name": "job-1"
+        },
+        {
+            "status": "fail",
+            "name": "job-2"
+        }
+    ]
+}

@@ -22,6 +22,7 @@ $(function() {
 
     $.ajax({
         url: jenkinsUrl,
+        dataType: 'json',
         success: function(data) {
 
             showLoadingSpin(false);

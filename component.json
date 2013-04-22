@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "bootstrap": "2.x",
     "jquery": "2.x",
     "handlebars": "1.0.x"
   }

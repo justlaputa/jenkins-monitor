@@ -1,6 +1,19 @@
-{{#each jobs}}
-<div class="job">
-  <span class="status">{{status}}</span>
-  <span class="name">{{name}}</span>
-</div>
-{{/each}}
+<table class="table table-hover">
+    <tbody>
+        {{#each jobs}}
+        <tr class="job">
+            <td class="name">{{name}}</td>
+            <td class="build">
+                <div class="progress progress-striped active">
+                    <div class="bar" style="width: 30%;"></div>
+                </div>
+            </td>
+            <td class="job-controls">
+                <a href="#"><i class="icon-eye-open"></i></a>
+                <a href="#"><i class="icon-play"></i></a>
+                <a href="#"><i class="icon-share"></i></a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

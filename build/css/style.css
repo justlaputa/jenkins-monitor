@@ -2,3 +2,15 @@ body {
     width: 600px;
     height: 400px;
 }
+
+.job .name {
+    width: 60%;
+}
+
+.job .build .progress {
+    margin-bottom: 0px;
+}
+
+.job .job-controls {
+    width: 20%;
+}

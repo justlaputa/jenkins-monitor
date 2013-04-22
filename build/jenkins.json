@@ -1,11 +1,11 @@
 {
     "jobs": [
         {
-            "status": "pass",
+            "color": "blue",
             "name": "job-1"
         },
         {
-            "status": "fail",
+            "color": "red",
             "name": "job-2"
         }
     ]

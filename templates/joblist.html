@@ -2,9 +2,12 @@
     <tbody>
         {{#each jobs}}
         <tr class="job">
-            <td class="name">{{name}}</td>
+            <td class="name">
+                <span class="badge {{#if color_type}}badge-{{color_type}}{{/if}}">s</span>
+                {{name}}
+            </td>
             <td class="build">
-                <div class="progress progress-striped active">
+                <div class="progress progress-striped active {{#unless in_progress}}hide{{/unless}}">
                     <div class="bar" style="width: 30%;"></div>
                 </div>
             </td>

@@ -11,36 +11,36 @@
  * "yellow_anime"
  */
 
-$(function() {
+ $(function() {
     var remoteUrl = 'https://builds.apache.org/api/json?tree=jobs[color,name]',
-        localUrl = 'jenkins.json',
+    localUrl = 'jenkins.json',
 
-        color_map = {
-            'aborted': {
-                status: 'aborted',
-                type: ''
-            },
-            'blue': {
-                status: 'succeed',
-                type: 'success'
-            },
-            'disabled': {
-                status: 'disabled',
-                type: 'inverse'
-            },
-            'grey': {
-                status: 'pending',
-                type: 'info'
-            },
-            'red': {
-                status: 'failed',
-                type: 'important'
-            },
-            'yellow': {
-                status: 'unstable',
-                type: 'warning'
-            }
-        };
+    color_map = {
+        'aborted': {
+            status: 'aborted',
+            type: ''
+        },
+        'blue': {
+            status: 'succeed',
+            type: 'success'
+        },
+        'disabled': {
+            status: 'disabled',
+            type: 'inverse'
+        },
+        'grey': {
+            status: 'pending',
+            type: 'info'
+        },
+        'red': {
+            status: 'failed',
+            type: 'important'
+        },
+        'yellow': {
+            status: 'unstable',
+            type: 'warning'
+        }
+    };
 
     function processData(data) {
         data.counts = {
@@ -69,6 +69,16 @@ $(function() {
 
     }
     
+    function showJobsInStatus(status) {
+        var jobs = $('.job');
+
+        if (status === 'all') {
+            jobs.removeClass('hide');
+        } else {
+            jobs.addClass('hide').filter('.' + status).removeClass('hide');
+        }
+    }
+
     function showLoadingSpin(show) {
 
     }
@@ -81,6 +91,12 @@ $(function() {
     function showLoadingJenkinsFail() {
         $('#job-list').text('fail to load');
     }
+
+    $(document).on('click', '#filter-btns button', function() {
+        var status = $(this).attr('title');
+
+        showJobsInStatus(status);
+    });
 
 
     showLoadingSpin(true);

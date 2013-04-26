@@ -92,31 +92,37 @@
         $('#job-list').text('fail to load');
     }
 
+    function start() {
+        $.ajax({
+            url: localUrl,
+            dataType: 'json',
+            success: function(data) {
+                processData(data);
+
+                showLoadingSpin(false);
+
+                renderJenkinsJobs(data);
+
+            },
+            error: function() {
+
+                showLoadingJenkinsFail();
+
+            }
+        });
+    }
+
     $(document).on('click', '#filter-btns button', function() {
         var status = $(this).attr('title');
 
         showJobsInStatus(status);
     });
 
-
-    showLoadingSpin(true);
-
-    $.ajax({
-        url: localUrl,
-        dataType: 'json',
-        success: function(data) {
-            processData(data);
-
-            showLoadingSpin(false);
-
-            renderJenkinsJobs(data);
-
-        },
-        error: function() {
-
-            showLoadingJenkinsFail();
-
-        }
+    $(document).on('click', '#refresh', function() {
+        start();
     });
+
+    // start getting remote data and render it
+    start();
 
 });

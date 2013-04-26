@@ -16,31 +16,55 @@ $(function() {
         localUrl = 'jenkins.json',
 
         color_map = {
-            'aborted': '', //aborted
-            'aborted_anime': '', //aborted
-            'blue': 'success',//success
-            'blue_anime': 'success',//success
-            'disabled': 'inverse',//disabled
-            'disabled_anime': 'inverse',//disabled
-            'grey': 'info',    //pending
-            'grey_anime': 'info',    //pending
-            'red': 'important',     //failed
-            'red_anime': 'important',     //failed
-            'yellow': 'warning',   //unstable
-            'yellow_anime': 'warning'   //unstable
+            'aborted': {
+                status: 'aborted',
+                type: ''
+            },
+            'blue': {
+                status: 'succeed',
+                type: 'success'
+            },
+            'disabled': {
+                status: 'disabled',
+                type: 'inverse'
+            },
+            'grey': {
+                status: 'pending',
+                type: 'info'
+            },
+            'red': {
+                status: 'failed',
+                type: 'important'
+            },
+            'yellow': {
+                status: 'unstable',
+                type: 'warning'
+            }
         };
 
     function processData(data) {
-        data['jobs'].forEach(function(job) {
-            var bootstrap_type = color_map[job.color];
+        data.counts = {
+            'total': 0,
+            'aborted': 0,
+            'succeed': 0,
+            'disabled': 0,
+            'pending': 0,
+            'failed': 0,
+            'unstable': 0
+        };
 
-            if (bootstrap_type) {
-                job.color_type = bootstrap_type;
-            }
+        data['jobs'].forEach(function(job) {
 
             if (job.color.search(/_anime$/) !== -1) {
                 job.in_progress = true;
+                job.color = job.color.replace('_anime', '');
             }
+
+            job.color_type = color_map[job.color].type;
+            job.status = color_map[job.color].status;
+
+            data.counts[job.status]++;
+            data.counts.total++;
         });
 
     }
@@ -51,6 +75,7 @@ $(function() {
 
     function renderJenkinsJobs(data) {
         $('#job-list').html(templates['joblist'](data));
+        $('#filter-btns').html(templates['filterbtn'](data.counts));
     }
 
     function showLoadingJenkinsFail() {

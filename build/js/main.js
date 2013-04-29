@@ -80,7 +80,12 @@
     }
 
     function showLoadingSpin(show) {
+        $('#loading-spin').toggleClass('hide', show === false);
+    }
 
+    function showJobList(show) {
+        $('#filter-btns').toggleClass('hide', show === false);
+        $('#job-list').toggleClass('hide', show === false);
     }
 
     function renderJenkinsJobs(data) {
@@ -92,7 +97,10 @@
         $('#job-list').text('fail to load');
     }
 
-    function start() {
+    function refresh() {
+        showJobList(false);
+        showLoadingSpin();
+
         $.ajax({
             url: localUrl,
             dataType: 'json',
@@ -100,6 +108,7 @@
                 processData(data);
 
                 showLoadingSpin(false);
+                showJobList();
 
                 renderJenkinsJobs(data);
 
@@ -119,10 +128,10 @@
     });
 
     $(document).on('click', '#refresh', function() {
-        start();
+        refresh();
     });
 
-    // start getting remote data and render it
-    start();
+    // refresh getting remote data and render it
+    refresh();
 
 });

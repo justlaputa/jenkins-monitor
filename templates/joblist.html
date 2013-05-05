@@ -3,7 +3,9 @@
         {{#each jobs}}
         <tr class="job {{status}} {{#if in_progress}}in-progress{{/if}}">
             <td class="name">
-                <label title="{{status}}" class="label {{#if color_type}}label-{{color_type}}{{/if}}">&nbsp;</label>
+                <label title="{{status}}" class="label {{#if color_type}}label-{{color_type}}{{/if}}">
+                    <i class="icon-circle-blank"></i>
+                </label>
                 {{name}}
             </td>
             <td class="build">

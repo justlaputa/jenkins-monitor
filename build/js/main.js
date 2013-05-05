@@ -50,12 +50,14 @@
             'disabled': 0,
             'pending': 0,
             'failed': 0,
-            'unstable': 0
+            'unstable': 0,
+            'in_progress': 0
         };
 
         data['jobs'].forEach(function(job) {
 
             if (job.color.search(/_anime$/) !== -1) {
+                data.counts.in_progress++;
                 job.in_progress = true;
                 job.color = job.color.replace('_anime', '');
             }

@@ -8,6 +8,7 @@
   "permissions": [
     "https://builds.apache.org/"
   ],
+  "options_page": "options.html",
   "browser_action": {
     "default_popup": "popup.html"
   }

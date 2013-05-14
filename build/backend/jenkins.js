@@ -51,8 +51,6 @@ function requestData() {
         $.ajax(url + JenkinsData.jobs.query).then(function(data) {
             var iconText;
 
-            count++;
-
             JenkinsData.jobs.data = data;
 
             iconText = Object.keys(data.jobs).length.toString();
@@ -61,7 +59,9 @@ function requestData() {
 
             setIcon(iconText);
 
-            listener(data);
+            if (listener) {
+                listener(data);
+            }
 
         }, function() {
             showLoadingFail();
@@ -95,4 +95,8 @@ function onData(callback) {
     if (callback) {
         listener = callback;
     }
+}
+
+function getData() {
+    return JenkinsData.jobs.data;
 }

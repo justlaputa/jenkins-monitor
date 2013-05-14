@@ -104,19 +104,24 @@
     });
 
     $(document).on('click', '#refresh', function() {
-        refresh();
     });
 
-    // refresh getting remote data and render it
+    function showJenkinsJobs(data) {
+        console.log(data);
+        processData(data);
+
+        showLoadingSpin(false);
+        showJobList();
+
+        renderJenkinsJobs(data);
+    }
+
+    // get data from backend and register event listener
     chrome.runtime.getBackgroundPage(function(backend) {
         backend.onData(function(data) {
-            console.log(data);
-            processData(data);
-
-            showLoadingSpin(false);
-            showJobList();
-
-            renderJenkinsJobs(data);
+            showJenkinsJobs(data);
         });
+
+        showJenkinsJobs(backend.getData());
     })
 });

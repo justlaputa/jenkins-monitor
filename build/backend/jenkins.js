@@ -2,6 +2,8 @@ var lastSuccessTime = null,
 
 JenkinsUrl = '',
 
+listener,
+
 JenkinsData = {
     jobs: {
         query: 'api/json?tree=jobs[color,name]',
@@ -49,6 +51,8 @@ function requestData() {
         $.ajax(url + JenkinsData.jobs.query).then(function(data) {
             var iconText;
 
+            count++;
+
             JenkinsData.jobs.data = data;
 
             iconText = Object.keys(data.jobs).length.toString();
@@ -56,6 +60,9 @@ function requestData() {
             console.log('get jenkins data, jobs count ', iconText);
 
             setIcon(iconText);
+
+            listener(data);
+
         }, function() {
             showLoadingFail();
         })
@@ -72,8 +79,8 @@ function start() {
 }
 
 // start request when user open browser or update extensions
-//chrome.runtime.onInstalled.addListener(start);
-//chrome.runtime.onStartup.addListener(start);
+chrome.runtime.onInstalled.addListener(start);
+chrome.runtime.onStartup.addListener(start);
 
 chrome.alarms.onAlarm.addListener(function(alarm) {
 
@@ -84,18 +91,8 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
 });
 //======= public API =======//
 
-function Jenkins() {
-
+function onData(callback) {
+    if (callback) {
+        listener = callback;
+    }
 }
-
-Jenkins.prototype.addListener = function(listener) {
-    listener = listener;
-}
-
-Jenkins.prototype.update = function() {
-    startRequest();
-}
-
-window.Jenkins = new Jenkins();
-
-start();

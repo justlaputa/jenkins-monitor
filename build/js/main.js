@@ -12,10 +12,8 @@
  */
 
  $(function() {
-    var remoteUrl = 'https://builds.apache.org/api/json?tree=jobs[color,name]',
-    localUrl = 'jenkins.json',
 
-    color_map = {
+    var color_map = {
         'aborted': {
             status: 'aborted',
             type: ''
@@ -99,30 +97,6 @@
         $('#job-list').text('fail to load');
     }
 
-    function refresh() {
-        showJobList(false);
-        showLoadingSpin();
-
-        $.ajax({
-            url: localUrl,
-            dataType: 'json',
-            success: function(data) {
-                processData(data);
-
-                showLoadingSpin(false);
-                showJobList();
-
-                renderJenkinsJobs(data);
-
-            },
-            error: function() {
-
-                showLoadingJenkinsFail();
-
-            }
-        });
-    }
-
     $(document).on('click', '#filter-btns button', function() {
         var status = $(this).attr('title');
 
@@ -134,6 +108,15 @@
     });
 
     // refresh getting remote data and render it
-    refresh();
+    chrome.runtime.getBackgroundPage(function(backend) {
+        backend.onData(function(data) {
+            console.log(data);
+            processData(data);
 
+            showLoadingSpin(false);
+            showJobList();
+
+            renderJenkinsJobs(data);
+        });
+    })
 });

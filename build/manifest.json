@@ -6,12 +6,16 @@
   "version": "1.0",
 
   "permissions": [
+    "alarms",
     "storage",
     "http://*/",
     "https://*/"
   ],
   "options_page": "options.html",
-  "browser_action": {
+  "background": {
+    "persistent": false,
+    "page": "background.html"
+  },"browser_action": {
     "default_popup": "popup.html"
   }
 }

@@ -68,7 +68,7 @@
         });
 
     }
-    
+
     function showJobsInStatus(status) {
         var jobs = $('.job');
 
@@ -122,6 +122,12 @@
             showJenkinsJobs(data);
         });
 
-        showJenkinsJobs(backend.getData());
+        backend.getData(function(data) {
+            if (data) {
+                showJenkinsJobs(data);
+            } else {
+                showLoadingSpin();
+            }
+        });
     })
 });

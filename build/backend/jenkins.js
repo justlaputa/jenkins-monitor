@@ -4,11 +4,8 @@ JenkinsUrl = '',
 
 listener,
 
-JenkinsData = {
-    jobs: {
-        query: 'api/json?tree=jobs[color,name]',
-        data: {}
-    }
+Query = {
+    jobs: 'api/json?tree=jobs[color,name]'
 };
 
 function setIcon(text) {
@@ -22,10 +19,16 @@ function showInactiveIcon() {
 function showLoadingFail() {
     setIcon('fail');
 }
- 
+
 function getOptions(callback) {
     chrome.storage.local.get('jenkins_url', function(items) {
         callback(items);
+    });
+}
+
+function storeData(data) {
+    chrome.storage.local.set({'jenkins_jobs': data}, function() {
+        console.log('jobs data saved to storage');
     });
 }
 
@@ -48,10 +51,10 @@ function requestData() {
             url += '/';
         }
 
-        $.ajax(url + JenkinsData.jobs.query).then(function(data) {
+        $.ajax(url + Query.jobs).then(function(data) {
             var iconText;
 
-            JenkinsData.jobs.data = data;
+            storeData(data);
 
             iconText = Object.keys(data.jobs).length.toString();
 
@@ -75,7 +78,9 @@ function start() {
 
     console.log('start');
 
-    chrome.alarms.create('refresh', {periodInMinutes: 0.17});
+    requestData();
+
+    chrome.alarms.create('refresh', {periodInMinutes: 5});
 }
 
 // start request when user open browser or update extensions
@@ -83,6 +88,7 @@ chrome.runtime.onInstalled.addListener(start);
 chrome.runtime.onStartup.addListener(start);
 
 chrome.alarms.onAlarm.addListener(function(alarm) {
+    console.log('alarm: ', alarm.name);
 
     if (alarm.name === 'refresh') {
         requestData();
@@ -97,6 +103,13 @@ function onData(callback) {
     }
 }
 
-function getData() {
-    return JenkinsData.jobs.data;
+function getData(callback) {
+    chrome.storage.local.get('jenkins_jobs', function(items) {
+        if (items['jenkins_jobs']) {
+            callback(items['jenkins_jobs']);
+        } else {
+            requestData();
+            callback(null);
+        }
+    });
 }

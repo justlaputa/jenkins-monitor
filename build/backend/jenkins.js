@@ -91,6 +91,7 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
     console.log('alarm: ', alarm.name);
 
     if (alarm.name === 'refresh') {
+        console.log(alarm);
         requestData();
     }
 
@@ -110,6 +111,20 @@ function getData(callback) {
         } else {
             requestData();
             callback(null);
+        }
+    });
+}
+
+function getNextRefreshTime(callback) {
+    chrome.alarms.get('refresh', function(alarm) {
+        var time;
+        if (callback) {
+            if (alarm) {
+                time = Math.floor((alarm.scheduledTime - Date.now()) / 1000);
+                callback(time);
+            } else {
+                callback(null);
+            }
         }
     });
 }

@@ -38,7 +38,9 @@
             status: 'unstable',
             type: 'warning'
         }
-    };
+    },
+
+    refreshTimerId = null;
 
     function processData(data) {
         data.counts = {
@@ -84,26 +86,49 @@
     }
 
     function showJobList(show) {
-        $('#filter-btns').toggleClass('hide', show === false);
+        $('#jobs-toolbar').toggleClass('hide', show === false);
         $('#job-list').toggleClass('hide', show === false);
     }
 
     function renderJenkinsJobs(data) {
         $('#job-list').html(templates['joblist'](data));
-        $('#filter-btns').html(templates['filterbtn'](data.counts));
+        $('#jobs-toolbar').html(templates['jobstoolbar'](data.counts));
     }
 
     function showLoadingJenkinsFail() {
         $('#job-list').text('fail to load');
     }
 
-    $(document).on('click', '#filter-btns button', function() {
+    function resetTimer(time) {
+        if (refreshTimerId) {
+            clearInterval(refreshTimerId);
+        }
+
+        refreshTimerId = setInterval(function() {
+            var min = 0,
+            sec = 0,
+            $timer = $('#jobs-toolbar .refresh .timer'),
+            $icon = $('#jobs-toolbar .refresh i');
+
+            time--;
+
+            min = Math.floor(time / 60);
+            sec = time % 60;
+
+            if (time <=0) {
+                $timer.text('Loading...');
+                $icon.addClass('icon-spin');
+            } else {
+                $timer.text(min + ':' + sec);
+                $icon.removeClass('icon-spin');
+            }
+        }, 1000);
+    }
+
+    $(document).on('click', '#jobs-toolbar .filter button', function() {
         var status = $(this).attr('title');
 
         showJobsInStatus(status);
-    });
-
-    $(document).on('click', '#refresh', function() {
     });
 
     function showJenkinsJobs(data) {
@@ -128,6 +153,10 @@
             } else {
                 showLoadingSpin();
             }
+        });
+
+        backend.getNextRefreshTime(function(time) {
+            resetTimer(time);
         });
     })
 });

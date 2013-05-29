@@ -21,7 +21,7 @@ module.exports = function(grunt) {
                     }
                 },
                 files: {
-                    'build/js/template.js': 'templates/*.html'
+                    'extension/js/template.js': 'templates/*.html'
                 }
             }
         }

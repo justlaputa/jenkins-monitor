@@ -1,130 +1,38 @@
-var lastSuccessTime = null,
-
-JenkinsUrl = '',
-
-listener,
-
-Query = {
-    jobs: 'api/json?tree=jobs[color,name]'
-};
-
-function setIcon(text) {
-    chrome.browserAction.setBadgeText({ text: text });
-}
-
-function showInactiveIcon() {
-    setIcon('options');
-}
-
-function showLoadingFail() {
-    setIcon('fail');
-}
-
-function getOptions(callback) {
-    chrome.storage.local.get('jenkins_url', function(items) {
-        callback(items);
-    });
-}
-
-function storeData(data) {
-    chrome.storage.local.set({'jenkins_jobs': data}, function() {
-        console.log('jobs data saved to storage');
-    });
-}
-
-function requestData() {
-    console.log('start to request data');
-
-    getOptions(function(options) {
-        var url = options['jenkins_url'];
-
-        if (!url) {
-            console.log('no option for jenkins url')
-
-            showInactiveIcon();
-            return;
-        }
-
-        console.log('got jenkins url: ', url);
-
-        if(url[url.length - 1] !== '/') {
-            url += '/';
-        }
-
-        $.ajax(url + Query.jobs).then(function(data) {
-            var iconText;
-
-            storeData(data);
-
-            iconText = Object.keys(data.jobs).length.toString();
-
-            console.log('get jenkins data, jobs count ', iconText);
-
-            setIcon(iconText);
-
-            if (listener) {
-                listener(data);
-            }
-
-        }, function() {
-            showLoadingFail();
-        })
-
-    })
-}
-
-
-function start() {
-
-    console.log('start');
-
-    requestData();
-
-    chrome.alarms.create('refresh', {periodInMinutes: 5});
-}
-
-// start request when user open browser or update extensions
-chrome.runtime.onInstalled.addListener(start);
-chrome.runtime.onStartup.addListener(start);
-
-chrome.alarms.onAlarm.addListener(function(alarm) {
-    console.log('alarm: ', alarm.name);
-
-    if (alarm.name === 'refresh') {
-        console.log(alarm);
-        requestData();
+(function(window, $) {
+    var query = {
+        jobs: 'api/json?tree=jobs[color,name]'
     }
 
-});
-//======= public API =======//
-
-function onData(callback) {
-    if (callback) {
-        listener = callback;
+    function Jenkins(url) {
+        this.url = url;
     }
-}
 
-function getData(callback) {
-    chrome.storage.local.get('jenkins_jobs', function(items) {
-        if (items['jenkins_jobs']) {
-            callback(items['jenkins_jobs']);
-        } else {
-            requestData();
-            callback(null);
-        }
-    });
-}
+    Jenkins.prototype.setUrl = function(url) {
+        this.url = url;
+    };
 
-function getNextRefreshTime(callback) {
-    chrome.alarms.get('refresh', function(alarm) {
-        var time;
-        if (callback) {
-            if (alarm) {
-                time = Math.floor((alarm.scheduledTime - Date.now()) / 1000);
-                callback(time);
-            } else {
-                callback(null);
+    //async function for getting all jenkins job data
+    //callback(err, data)
+    Jenkins.prototype.getJobs = function(callback) {
+
+        $.ajax(url + query.jobs).then(function(data) {
+
+            console.log('get jenkins data: ', data);
+
+            if (callback) {
+                callback(null, data);
             }
-        }
-    });
-}
+
+        }, function(jqXHR, status, error) {
+
+            console.log('request for jobs fails: %s, %s', status, error);
+
+            if (callback) {
+                callback(error, null);
+            }
+        });
+    };
+
+    window.Jenkins = Jenkins;
+
+} (window, jQuery) )

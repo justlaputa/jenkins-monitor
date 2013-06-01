@@ -9,14 +9,10 @@
     listeners = {};
 
     function emit(event, data) {
-        var i;
-
         console.log('emiting event: ', event);
 
         if (listeners[event]) {
-            for (i = 0; i < listeners[event].length; i++) {
-                listeners[event][i](data);
-            }
+            listeners[event](data);
         }
     }
 
@@ -101,11 +97,13 @@
     //======= public API =======//
 
     window.on = function(event, callback) {
-        if (!listeners[event]) {
-            listeners[event] = [];
-        }
 
-        listeners[event].push(callback);
+        listeners[event] = callback;
+        console.log('register listener', event, listeners[event]);
+    };
+
+    window.refresh = function() {
+        start();
     };
 
     //compatibility api

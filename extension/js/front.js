@@ -99,6 +99,14 @@
         $('#job-list').text('fail to load');
     }
 
+    function setRefreshButton(text, spin) {
+        var $timer = $('#jobs-toolbar .refresh .timer'),
+        $icon = $('#jobs-toolbar .refresh i');
+
+        $timer.text(text);
+        $icon.toggleClass('icon-spin', spin);
+    }
+
     function resetTimer(time) {
         if (refreshTimerId) {
             clearInterval(refreshTimerId);
@@ -106,9 +114,7 @@
 
         refreshTimerId = setInterval(function() {
             var min = 0,
-            sec = 0,
-            $timer = $('#jobs-toolbar .refresh .timer'),
-            $icon = $('#jobs-toolbar .refresh i');
+            sec = 0;
 
             time--;
 
@@ -116,11 +122,9 @@
             sec = time % 60;
 
             if (time <=0) {
-                $timer.text('Loading...');
-                $icon.addClass('icon-spin');
+                setRefreshButton('Loading...', true);
             } else {
-                $timer.text(min + ':' + sec);
-                $icon.removeClass('icon-spin');
+                setRefreshButton(min + ':' + sec, false);
             }
         }, 1000);
     }
@@ -129,6 +133,13 @@
         var status = $(this).attr('title');
 
         showJobsInStatus(status);
+    });
+
+    $(document).on('click', '#jobs-toolbar .refresh button', function() {
+        chrome.runtime.getBackgroundPage(function(backend) {
+            clearInterval(refreshTimerId);
+            backend.refresh();
+        });
     });
 
     function showJenkinsJobs(data) {
@@ -152,8 +163,8 @@
         });
 
         backend.on('loading', function() {
-
-        });
+            setRefreshButton('Loading...', true);
+        })
 
         backend.getData(function(data) {
             if (data) {

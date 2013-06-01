@@ -2,13 +2,23 @@
 
     var lastSuccessTime = null,
 
-    JenkinsUrl = '',
+    options = null,
 
-    listener,
+    jenkins = null,
 
-    Query = {
-        jobs: 'api/json?tree=jobs[color,name]'
-    };
+    listeners = {};
+
+    function emit(event, data) {
+        var i;
+
+        console.log('emiting event: ', event);
+
+        if (listeners[event]) {
+            for (i = 0; i < listeners[event].length; i++) {
+                listeners[event][i](data);
+            }
+        }
+    }
 
     function setIcon(text) {
         chrome.browserAction.setBadgeText({ text: text });
@@ -37,42 +47,18 @@
     function requestData() {
         console.log('start to request data');
 
-        getOptions(function(options) {
-            var url = options['jenkins_url'];
+        jenkins.getJobs(function(err, data) {
+            if (err) {
+                console.log('fali to fetch remote data');
 
-            if (!url) {
-                console.log('no option for jenkins url')
-
-                showInactiveIcon();
-                return;
-            }
-
-            console.log('got jenkins url: ', url);
-
-            if(url[url.length - 1] !== '/') {
-                url += '/';
-            }
-
-            $.ajax(url + Query.jobs).then(function(data) {
-                var iconText;
+                emit('error', err);
+            } else {
+                console.log('got data from remote: ', data);
 
                 storeData(data);
-
-                iconText = Object.keys(data.jobs).length.toString();
-
-                console.log('get jenkins data, jobs count ', iconText);
-
-                setIcon(iconText);
-
-                if (listener) {
-                    listener(data);
-                }
-
-            }, function() {
-                showLoadingFail();
-            })
-
-        })
+                emit('data', data);
+            }
+        });
     }
 
 
@@ -80,9 +66,18 @@
 
         console.log('start');
 
-        requestData();
+        setIcon('Loading...');
 
-        chrome.alarms.create('refresh', {periodInMinutes: 5});
+        emit('loading');
+
+        chrome.storage.local.get('jenkins_url', function(items) {
+            console.log('get options: ', items);
+
+            options = items;
+            jenkins = new Jenkins(options['jenkins_url']);
+            requestData();
+            chrome.alarms.create('refresh', {periodInMinutes: 0.1});
+        });
     }
 
     // start request when user open browser or update extensions
@@ -100,13 +95,22 @@
     });
     //======= public API =======//
 
-    function onData(callback) {
-        if (callback) {
-            listener = callback;
+    window.on = function(event, callback) {
+        if (!listeners[event]) {
+            listeners[event] = [];
         }
+
+        listeners[event].push(callback);
+    };
+
+
+
+    //compatibility api
+    window.onData = function(callback) {
+        on('data', callback);
     }
 
-    function getData(callback) {
+    window.getData = function(callback) {
         chrome.storage.local.get('jenkins_jobs', function(items) {
             if (items['jenkins_jobs']) {
                 callback(items['jenkins_jobs']);
@@ -117,7 +121,7 @@
         });
     }
 
-    function getNextRefreshTime(callback) {
+    window.getNextRefreshTime = function(callback) {
         chrome.alarms.get('refresh', function(alarm) {
             var time;
             if (callback) {

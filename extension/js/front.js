@@ -143,8 +143,16 @@
 
     // get data from backend and register event listener
     chrome.runtime.getBackgroundPage(function(backend) {
-        backend.onData(function(data) {
+        backend.on('data', function(data) {
             showJenkinsJobs(data);
+
+            backend.getNextRefreshTime(function(time) {
+                resetTimer(time);
+            });
+        });
+
+        backend.on('loading', function() {
+
         });
 
         backend.getData(function(data) {

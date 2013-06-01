@@ -47,14 +47,22 @@
     function requestData() {
         console.log('start to request data');
 
+        setIcon('Loading...');
+
+        emit('loading');
+
         jenkins.getJobs(function(err, data) {
             if (err) {
                 console.log('fali to fetch remote data');
 
+                setIcon('fail');
                 emit('error', err);
             } else {
                 console.log('got data from remote: ', data);
 
+                setIcon(data.jobs.length.toString());
+
+                data.timestamp = new Date();
                 storeData(data);
                 emit('data', data);
             }
@@ -66,17 +74,13 @@
 
         console.log('start');
 
-        setIcon('Loading...');
-
-        emit('loading');
-
         chrome.storage.local.get('jenkins_url', function(items) {
             console.log('get options: ', items);
 
             options = items;
             jenkins = new Jenkins(options['jenkins_url']);
             requestData();
-            chrome.alarms.create('refresh', {periodInMinutes: 0.1});
+            chrome.alarms.create('refresh', {periodInMinutes: 5});
         });
     }
 
@@ -89,6 +93,7 @@
 
         if (alarm.name === 'refresh') {
             console.log(alarm);
+
             requestData();
         }
 
@@ -103,13 +108,7 @@
         listeners[event].push(callback);
     };
 
-
-
     //compatibility api
-    window.onData = function(callback) {
-        on('data', callback);
-    }
-
     window.getData = function(callback) {
         chrome.storage.local.get('jenkins_jobs', function(items) {
             if (items['jenkins_jobs']) {

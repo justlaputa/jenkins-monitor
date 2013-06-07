@@ -6,6 +6,8 @@
 
     jenkins = null,
 
+    notification = null,
+
     listeners = {};
 
     function emit(event, data) {
@@ -34,9 +36,77 @@
         });
     }
 
-    function storeData(data) {
-        chrome.storage.local.set({'jenkins_jobs': data}, function() {
-            console.log('jobs data saved to storage');
+    function storeData(key, value, callback) {
+        var items = {};
+        items[key] = value;
+        chrome.storage.local.set(items, function() {
+            console.log('store data: ', key, value);
+            if (callback) {
+                callback();
+            }
+        });
+    }
+
+    function retrieveData(key, callback) {
+        chrome.storage.local.get(key, function(items) {
+            console.log('retrieve data: ', items);
+            callback(items[key]);
+        });
+    }
+
+    function makeNotification(oldData, newData) {
+        var oldJobs, newJobs,
+        name, oldJob, newJob;
+
+        function hashJobByNames(jobsData) {
+            var hash = {},
+            i;
+
+            for (i = 0; i < jobsData.length; i++) {
+                hash[jobsData[i].name] = {
+                    color: jobsData[i].color
+                };
+            }
+
+            return hash;
+        }
+
+        oldJobs = hashJobByNames(oldData.jobs);
+        newJobs = hashJobByNames(newData.jobs);
+
+        for ( name in oldJobs) {
+            oldJob = oldJobs[name];
+            newJob = newJobs[name];
+
+            if (newJob) {
+                if (newJob.color !== oldJob.color) {
+                   notification.notifyJobStatusChange(name, oldJob.color, newJob.color);
+                }
+            } else {
+                notification.notifyRemoveJob(name);
+            }
+        }
+
+        for (name in newJobs) {
+            if (!oldJobs[name]) {
+                notification.notifyNewJob(name);
+            }
+        }
+    }
+
+    function handleNewData(newData) {
+        retrieveData('jenkins_jobs', function(oldData) {
+
+            if (oldData) {
+                console.log('get old data from storage, ', oldData);
+                makeNotification(oldData, newData);
+            } else {
+                console.log('no old data found');
+            }
+
+            storeData('jenkins_jobs', newData, function() {
+                console.log('data stored');
+            });
         });
     }
 
@@ -52,6 +122,7 @@
                 console.log('fali to fetch remote data');
 
                 setIcon('fail');
+
                 emit('error', err);
             } else {
                 console.log('got data from remote: ', data);
@@ -59,7 +130,9 @@
                 setIcon(data.jobs.length.toString());
 
                 data.timestamp = new Date();
-                storeData(data);
+
+                handleNewData(data);
+
                 emit('data', data);
             }
         });
@@ -70,12 +143,25 @@
 
         console.log('start');
 
+        chrome.storage.local.set({'jenkins_jobs': null}, function() {
+            console.log('cleared old jobs data');
+        })
+
+        notification = new Notification();
+
+        refresh();
+    }
+
+    function refresh() {
         chrome.storage.local.get('jenkins_url', function(items) {
             console.log('get options: ', items);
 
             options = items;
+
             jenkins = new Jenkins(options['jenkins_url']);
+
             requestData();
+
             chrome.alarms.create('refresh', {periodInMinutes: 5});
         });
     }
@@ -103,7 +189,7 @@
     };
 
     window.refresh = function() {
-        start();
+        refresh();
     };
 
     //compatibility api

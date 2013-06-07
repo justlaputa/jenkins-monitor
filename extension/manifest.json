@@ -13,7 +13,6 @@
   ],
   "options_page": "options.html",
   "background": {
-    "persistent": false,
     "page": "background.html"
   },"browser_action": {
     "default_popup": "popup.html"

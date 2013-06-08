@@ -2,13 +2,30 @@
 
 <html>
 <head>
-	<title>Options</title>
+  <title>Options for Jenkins-Chrome</title>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap-responsive.css">
+  <link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+
+  <script src="js/lib/jquery.js"></script>
+  <script src="js/lib/bootstrap.js"></script>
+  <script src="js/lib/handlebars.runtime.js"></script>
 </head>
 <body>
-	<span> Jenkins URL: </span>
-	<input id="jenkins-url" type="text" />
-	<p id="info"></p>
+  <form class="form-horizontal">
+    <fieldset>
+      <legend>Options</legend>
+      <div class="control-group">
+        <label class="control-label" for="jenkins-url">Jenkins Url: </label>
+        <div class="controls">
+          <input type="text" id="jenkins-url" placeholder="Input Jenkins URL here">
+          <span class="save-info"></span>
+        </div>
+      </div>
+    </fieldset>
+  </form>
 
-	<script src="js/options.js"></script>
+  <script src="js/options.js"></script>
 </body>
 </html>

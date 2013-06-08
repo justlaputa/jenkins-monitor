@@ -164,7 +164,7 @@
 
         backend.on('loading', function() {
             setRefreshButton('Loading...', true);
-        })
+        });
 
         backend.getData(function(data) {
             if (data) {
@@ -177,5 +177,5 @@
         backend.getNextRefreshTime(function(time) {
             resetTimer(time);
         });
-    })
+    });
 });

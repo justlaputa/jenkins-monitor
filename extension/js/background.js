@@ -145,7 +145,7 @@
 
         chrome.storage.local.set({'jenkins_jobs': null}, function() {
             console.log('cleared old jobs data');
-        })
+        });
 
         notification = new Notification();
 
@@ -154,6 +154,12 @@
 
     function refresh() {
         chrome.storage.local.get('jenkins_url', function(items) {
+            if (!items['jenkins_url']) {
+                console.log('no option set for jenkins url');
+                setIcon('no');
+                return;
+            }
+
             console.log('get options: ', items);
 
             options = items;
@@ -202,7 +208,7 @@
                 callback(null);
             }
         });
-    }
+    };
 
     window.getNextRefreshTime = function(callback) {
         chrome.alarms.get('refresh', function(alarm) {
@@ -216,5 +222,5 @@
                 }
             }
         });
-    }
-} (window, jQuery) )
+    };
+} (window, jQuery) );

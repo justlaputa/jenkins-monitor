@@ -15,7 +15,7 @@
         });
 
         chrome.runtime.getBackgroundPage(function(backend) {
-            backend.refresh();
+            backend.restart();
         });
     }
 

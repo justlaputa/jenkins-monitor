@@ -145,11 +145,10 @@
 
         chrome.storage.local.set({'jenkins_jobs': null}, function() {
             console.log('cleared old jobs data');
+
+            notification = new Notification();
+            refresh();
         });
-
-        notification = new Notification();
-
-        refresh();
     }
 
     function refresh() {
@@ -192,6 +191,10 @@
 
         listeners[event] = callback;
         console.log('register listener', event, listeners[event]);
+    };
+
+    window.restart = function() {
+        start();
     };
 
     window.refresh = function() {

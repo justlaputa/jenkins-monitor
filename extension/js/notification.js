@@ -20,28 +20,41 @@
     }
 
     Notification.prototype.notify = function() {
-        showNotification(this.notifyImg, 'Hello', 'Test')
+        showNotification(this.notifyImg, 'Test Notify',
+            'Hello notification', this.stayDelay);
     };
 
-    Notification.prototype.notifyJobStatusChange = function(name, oldColor, newColor) {
-        console.log('notify status change: ', oldColor, newColor);
-        showNotification(this.notifyImg, 'Status Change',
-                         name + '\nfrom ' + oldColor + ' to ' + newColor,
+    Notification.prototype.notifyJobStatusChange = function(name, from, to) {
+        console.log('notify status change: ', from, to);
+        showNotification(this.notifyImg, 'Status Change: ' + name,
+                         'From ' + from + ' to ' + to,
                          this.stayDelay);
     };
 
-    Notification.prototype.notifyRemoveJob = function(name) {
+    Notification.prototype.notifyJobBuildStart = function(name, status) {
+        console.log('notify build start: ', status);
+        showNotification(this.notifyImg, 'Build Start: ' + name,
+                         'Current status: ' + status, this.stayDelay);
+    };
+
+    Notification.prototype.notifyJobBuildDone = function(name, from, to) {
+        console.log('notify job build done: ', name, from, to);
+        showNotification(this.notifyImg, 'Build Done: ' + name,
+                         'From ' + from + ' to ' + to,
+                         this.stayDelay);
+    };
+
+    Notification.prototype.notifyJobRemove = function(name, status) {
         console.log('notify job remove: ', name);
-        showNotification(this.notifyImg, 'Remove',
-                         'Job ' + name + ' removed',
+        showNotification(this.notifyImg, 'Job Removed: ' + name,
+                         'Last Status: ' + status,
                          this.stayDelay);
     };
 
-    Notification.prototype.notifyNewJob = function(name) {
+    Notification.prototype.notifyJobAdd = function(name, status) {
         console.log('notify job add: ', name);
-        showNotification(this.notifyImg,
-                         'New', 'Job ' + name + ' added',
-                         this.stayDelay);
+        showNotification(this.notifyImg, 'Job Added: ' + name,
+                         'Status: ' + status, this.stayDelay);
     };
 
     window.Notification = Notification;

@@ -56,7 +56,8 @@
 
     function makeNotification(oldData, newData) {
         var oldJobs, newJobs,
-        name, oldJob, newJob;
+        name, oldJob, newJob,
+        oldStatInfo, newStatInfo;
 
         function hashJobByNames(jobsData) {
             var hash = {},
@@ -79,17 +80,30 @@
             newJob = newJobs[name];
 
             if (newJob) {
-                if (newJob.color !== oldJob.color) {
-                   notification.notifyJobStatusChange(name, oldJob.color, newJob.color);
+                oldStatInfo = ColorMap[oldJob.color];
+                newStatInfo = ColorMap[newJob.color];
+
+                if (newStatInfo.building && !oldStatInfo.building) {
+
+                    notification.notifyJobBuildStart(name, oldStatInfo.status);
+
+                } else if (!newStatInfo.building && oldStatInfo.building) {
+
+                    notification.notifyJobBuildDone(name, oldStatInfo.status, newStatInfo.status);
+
+                } else if (newStatInfo.status !== oldStatInfo.status) {
+
+                    notification.notifyJobStatusChange(name, oldStatInfo.status, newStatInfo.status);
                 }
             } else {
-                notification.notifyRemoveJob(name);
+                notification.notifyJobRemove(name, oldStatInfo.status);
             }
         }
 
         for (name in newJobs) {
+            newJob = newJobs[name];
             if (!oldJobs[name]) {
-                notification.notifyNewJob(name);
+                notification.notifyJobAdd(name, ColorMap[newJobs.color].status);
             }
         }
     }

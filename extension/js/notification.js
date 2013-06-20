@@ -3,7 +3,7 @@
     function cancel(notification) {
         return function() {
             notification.cancel();
-        }
+        };
     }
 
     function Notification() {

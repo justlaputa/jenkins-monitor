@@ -103,7 +103,7 @@
         for (name in newJobs) {
             newJob = newJobs[name];
             if (!oldJobs[name]) {
-                notification.notifyJobAdd(name, ColorMap[newJobs.color].status);
+                notification.notifyJobAdd(name, ColorMap[newJob.color].status);
             }
         }
     }

@@ -11,8 +11,13 @@
         this.notifyImg = 'img/notify.png';
     }
 
-    function showNotification(img, title, content, delay) {
+    function showNotification(img, title, content, delay, onClickUrl) {
         var notification = webkitNotifications.createNotification(img, title, content);
+
+        notification.onclick = function() {
+            chrome.tabs.create({url: onClickUrl});
+            notification.cancel();
+        };
 
         notification.show();
 
@@ -24,37 +29,37 @@
             'Hello notification', this.stayDelay);
     };
 
-    Notification.prototype.notifyJobStatusChange = function(name, from, to) {
+    Notification.prototype.notifyJobStatusChange = function(name, from, to, url) {
         console.log('notify status change: ', from, to);
         showNotification(this.notifyImg, 'Status Change: ' + name,
                          'From ' + from + ' to ' + to,
-                         this.stayDelay);
+                         this.stayDelay, url);
     };
 
-    Notification.prototype.notifyJobBuildStart = function(name, status) {
+    Notification.prototype.notifyJobBuildStart = function(name, status, url) {
         console.log('notify build start: ', status);
         showNotification(this.notifyImg, 'Build Start: ' + name,
-                         'Current status: ' + status, this.stayDelay);
+                         'Current status: ' + status, this.stayDelay, url);
     };
 
-    Notification.prototype.notifyJobBuildDone = function(name, from, to) {
+    Notification.prototype.notifyJobBuildDone = function(name, from, to, url) {
         console.log('notify job build done: ', name, from, to);
         showNotification(this.notifyImg, 'Build Done: ' + name,
                          'From ' + from + ' to ' + to,
-                         this.stayDelay);
+                         this.stayDelay, url);
     };
 
-    Notification.prototype.notifyJobRemove = function(name, status) {
+    Notification.prototype.notifyJobRemove = function(name, status, url) {
         console.log('notify job remove: ', name);
         showNotification(this.notifyImg, 'Job Removed: ' + name,
                          'Last Status: ' + status,
-                         this.stayDelay);
+                         this.stayDelay, url);
     };
 
-    Notification.prototype.notifyJobAdd = function(name, status) {
+    Notification.prototype.notifyJobAdd = function(name, status, url) {
         console.log('notify job add: ', name);
         showNotification(this.notifyImg, 'Job Added: ' + name,
-                         'Status: ' + status, this.stayDelay);
+                         'Status: ' + status, this.stayDelay, url);
     };
 
     window.Notification = Notification;

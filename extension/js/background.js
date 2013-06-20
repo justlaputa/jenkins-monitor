@@ -65,7 +65,8 @@
 
             for (i = 0; i < jobsData.length; i++) {
                 hash[jobsData[i].name] = {
-                    color: jobsData[i].color
+                    color: jobsData[i].color,
+                    url: jobsData[i].url
                 };
             }
 
@@ -85,25 +86,25 @@
 
                 if (newStatInfo.building && !oldStatInfo.building) {
 
-                    notification.notifyJobBuildStart(name, oldStatInfo.status);
+                    notification.notifyJobBuildStart(name, oldStatInfo.status, oldJob.url);
 
                 } else if (!newStatInfo.building && oldStatInfo.building) {
 
-                    notification.notifyJobBuildDone(name, oldStatInfo.status, newStatInfo.status);
+                    notification.notifyJobBuildDone(name, oldStatInfo.status, newStatInfo.status, oldJob.url);
 
                 } else if (newStatInfo.status !== oldStatInfo.status) {
 
-                    notification.notifyJobStatusChange(name, oldStatInfo.status, newStatInfo.status);
+                    notification.notifyJobStatusChange(name, oldStatInfo.status, newStatInfo.status, oldJob.url);
                 }
             } else {
-                notification.notifyJobRemove(name, oldStatInfo.status);
+                notification.notifyJobRemove(name, oldStatInfo.status, oldJob.url);
             }
         }
 
         for (name in newJobs) {
             newJob = newJobs[name];
             if (!oldJobs[name]) {
-                notification.notifyJobAdd(name, ColorMap[newJob.color].status);
+                notification.notifyJobAdd(name, ColorMap[newJob.color].status, newJob.url);
             }
         }
     }

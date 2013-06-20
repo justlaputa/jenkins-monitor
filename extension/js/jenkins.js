@@ -1,7 +1,7 @@
 (function(window, $) {
     var query = {
-        jobs: 'api/json?tree=jobs[color,name]'
-    }
+        jobs: 'api/json?tree=jobs[color,name,url]'
+    };
 
     function Jenkins(url) {
         this.url = url;
@@ -35,4 +35,4 @@
 
     window.Jenkins = Jenkins;
 
-} (window, jQuery) )
+} (window, jQuery) );

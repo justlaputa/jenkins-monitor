@@ -142,6 +142,10 @@
         });
     });
 
+    $(document).on('click', '#job-list table td.name span', function() {
+        chrome.tabs.create({url: $(this).data('href')});
+    });
+
     function showJenkinsJobs(data) {
         console.log(data);
         processData(data);

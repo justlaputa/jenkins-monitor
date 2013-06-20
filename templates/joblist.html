@@ -3,10 +3,10 @@
         {{#each jobs}}
         <tr class="job {{status}} {{#if in_progress}}in-progress{{/if}}">
             <td class="name">
-                <label title="{{status}}" class="label {{#if color_type}}label-{{color_type}}{{/if}}">
-                    <i class="icon-circle-blank"></i>
-                </label>
-                {{name}}
+              <span data-href="{{url}}lastBuild" title="{{status}}" class="latest-status label {{#if color_type}}label-{{color_type}}{{/if}}">
+                <i class="icon-circle-blank"></i>
+              </span>
+              <span data-href="{{url}}">{{name}}</span>
             </td>
             <td class="build">
                 <div class="progress progress-striped active {{#unless in_progress}}hide{{/unless}}">

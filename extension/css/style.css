@@ -14,3 +14,7 @@ body {
 .job .controls {
     width: 15%;
 }
+
+tr.job td.name span{
+    cursor: pointer;
+}

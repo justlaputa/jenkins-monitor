@@ -1,9 +1,9 @@
 {
-  "name": "Jenkins Chrome",
+  "name": "Jenkins Monitor",
   "version": "0.1",
   "manifest_version": 2,
 
-  "description": "Chrome Extensions for Jenkins.",
+  "description": "Chrome Extensions to monitor your jenkins ci.",
   "homepage_url": "https://github.com/justlaputa/jenkins-chrome",
   "minimum_chrome_version": "22",
 

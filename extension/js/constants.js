@@ -57,4 +57,13 @@
         }
     };
 
+    window.StatusMap = {
+        'aborted': 'grey',
+        'succeed': 'green',
+        'disabled': 'grey',
+        'pending': 'blue',
+        'failed': 'red',
+        'unstable': 'yellow'
+    };
+
 } (window));

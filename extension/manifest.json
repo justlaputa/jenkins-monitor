@@ -4,7 +4,7 @@
   "manifest_version": 2,
 
   "description": "Chrome Extensions to monitor your jenkins ci.",
-  "homepage_url": "https://github.com/justlaputa/jenkins-chrome",
+  "homepage_url": "https://github.com/justlaputa/jenkins-monitor",
   "minimum_chrome_version": "22",
 
   "icons": {

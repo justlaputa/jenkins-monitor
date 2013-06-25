@@ -33,6 +33,10 @@
   },
 
   "web_accessible_resources": [
-    "img/notify.png"
+    "img/blue.png",
+    "img/green.png",
+    "img/grey.png",
+    "img/red.png",
+    "img/yellow.png"
   ]
 }

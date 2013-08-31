@@ -56,7 +56,7 @@
             type: 'warning'
         },
         'notbuilt': {
-            status: 'disabled',
+            status: 'aborted',
             type: ''
         }
     };

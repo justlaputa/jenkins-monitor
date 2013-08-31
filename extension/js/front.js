@@ -37,6 +37,10 @@
         'yellow': {
             status: 'unstable',
             type: 'warning'
+        },
+        'notbuilt': {
+            status: 'disabled',
+            type: ''
         }
     },
 

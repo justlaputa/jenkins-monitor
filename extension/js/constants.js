@@ -54,6 +54,10 @@
             status: 'unstable',
             building: true,
             type: 'warning'
+        },
+        'notbuilt': {
+            status: 'disabled',
+            type: ''
         }
     };
 

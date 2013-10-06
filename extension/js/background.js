@@ -31,8 +31,8 @@
     }
 
     function getOptions(callback) {
-        chrome.storage.local.get('jenkins_url', function(items) {
-            callback(items);
+        chrome.storage.local.get('options', function(items) {
+            callback(items['options']);
         });
     }
 
@@ -110,7 +110,8 @@
     }
 
     function handleNewData(newData) {
-        retrieveData('jenkins_jobs', function(oldData) {
+        chrome.storage.local.get('jenkins_jobs', function(items) {
+            var oldData = items['jenkins_jobs'];
 
             if (oldData) {
                 console.log('get old data from storage, ', oldData);
@@ -167,22 +168,24 @@
     }
 
     function refresh() {
-        chrome.storage.local.get('jenkins_url', function(items) {
-            if (!items['jenkins_url']) {
+        getOptions(function(options) {
+            var refresh_time;
+
+            if (!options['jenkins-url']) {
                 console.log('no option set for jenkins url');
                 setIcon('no');
                 return;
             }
 
-            console.log('get options: ', items);
+            console.log('get options: ', options);
 
-            options = items;
-
-            jenkins = new Jenkins(options['jenkins_url']);
+            jenkins = new Jenkins(options['jenkins-url']);
 
             requestData();
 
-            chrome.alarms.create('refresh', {periodInMinutes: 5});
+            refresh_time = parseInt(options['refresh-time'], 10);
+
+            chrome.alarms.create('refresh', {periodInMinutes: refresh_time});
         });
     }
 

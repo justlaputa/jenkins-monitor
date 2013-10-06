@@ -13,13 +13,21 @@
   <script src="js/lib/handlebars.runtime.js"></script>
 </head>
 <body>
-  <form class="form-horizontal">
+  <form class="form-horizontal" id="options-form">
     <fieldset>
       <legend>Options</legend>
       <div class="control-group">
         <label class="control-label" for="jenkins-url">Jenkins Url: </label>
         <div class="controls">
-          <input type="text" id="jenkins-url" placeholder="Input Jenkins URL here">
+          <input type="text" name="jenkins-url" placeholder="Input Jenkins URL here">
+          <span class="save-info"></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="refresh-time">Refresh interval (min)</label>
+        <div class="controls">
+          <input type="range" name="refresh-time" min="5" max="30" step="5" value="5">
+          <output name="refresh-time-value" for="refresh-time"></output>
           <span class="save-info"></span>
         </div>
       </div>

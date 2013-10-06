@@ -1,2 +1,9 @@
 node_modules/
-components/
+bower_components/
+
+extension/js/lib/
+extension/js/template.js
+extension/font/
+extension/css/bootstrap*
+extension/css/font-awesome*
+extension/img/glyphicons*

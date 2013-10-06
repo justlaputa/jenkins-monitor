@@ -1,4 +1,5 @@
 {
+  "name": "jenkins-monitor",
   "dependencies": {
     "bootstrap": "2.x",
     "jquery": "2.x",

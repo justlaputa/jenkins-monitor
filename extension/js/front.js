@@ -16,7 +16,7 @@
     var color_map = {
         'aborted': {
             status: 'aborted',
-            type: ''
+            type: 'inverse'
         },
         'blue': {
             status: 'succeed',
@@ -32,7 +32,7 @@
         },
         'red': {
             status: 'failed',
-            type: 'important'
+            type: 'error'
         },
         'yellow': {
             status: 'unstable',
@@ -40,7 +40,7 @@
         },
         'notbuilt': {
             status: 'aborted',
-            type: ''
+            type: 'inverse'
         }
     },
 

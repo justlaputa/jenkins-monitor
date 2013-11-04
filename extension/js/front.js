@@ -150,6 +150,12 @@
         chrome.tabs.create({url: $(this).data('href')});
     });
 
+    $(document).on('mouseenter mouseleave', "#job-list tr.job", function(e) {
+        var watchBar = $(this).find('td.tools .watch');
+
+        watchBar.toggleClass('hide', e.type === 'mouseleave');
+    });
+
     function showJenkinsJobs(data) {
         console.log(data);
         processData(data);

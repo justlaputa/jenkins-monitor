@@ -54,24 +54,25 @@
         });
     }
 
+    function hashJobByNames(jobsData) {
+        var hash = {},
+        i;
+
+        for (i = 0; i < jobsData.length; i++) {
+            hash[jobsData[i].name] = {
+                color: jobsData[i].color,
+                url: jobsData[i].url,
+                seq: i
+            };
+        }
+
+        return hash;
+    }
+
     function makeNotification(oldData, newData) {
         var oldJobs, newJobs,
         name, oldJob, newJob,
         oldStatInfo, newStatInfo;
-
-        function hashJobByNames(jobsData) {
-            var hash = {},
-            i;
-
-            for (i = 0; i < jobsData.length; i++) {
-                hash[jobsData[i].name] = {
-                    color: jobsData[i].color,
-                    url: jobsData[i].url
-                };
-            }
-
-            return hash;
-        }
 
         oldJobs = hashJobByNames(oldData.jobs);
         newJobs = hashJobByNames(newData.jobs);
@@ -109,6 +110,24 @@
         }
     }
 
+    function updateWatched(oldData, newData) {
+        var oldJobs = {},
+            newJobs, name, oldJob, newJob;
+
+        newJobs = hashJobByNames(newData.jobs);
+
+        if (oldData) {
+            oldJobs = hashJobByNames(oldData.jobs);
+        }
+
+        for (name in newJobs) {
+            newJob = newJobs[name];
+            oldJob = oldJobs[name];
+
+            newData.jobs[newJob.seq].watched = !!(oldJob && oldData.jobs[oldJob.seq].watched);
+        }
+    }
+
     function handleNewData(newData) {
         chrome.storage.local.get('jenkins_jobs', function(items) {
             var oldData = items['jenkins_jobs'];
@@ -119,6 +138,8 @@
             } else {
                 console.log('no old data found');
             }
+
+            updateWatched(oldData, newData);
 
             storeData('jenkins_jobs', newData, function() {
                 console.log('data stored');

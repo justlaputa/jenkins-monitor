@@ -55,7 +55,8 @@
             'pending': 0,
             'failed': 0,
             'unstable': 0,
-            'in_progress': 0
+            'in_progress': 0,
+            'watched': 0
         };
 
         data['jobs'].forEach(function(job) {
@@ -64,6 +65,10 @@
                 data.counts.in_progress++;
                 job.in_progress = true;
                 job.color = job.color.replace('_anime', '');
+            }
+
+            if (job.watched) {
+                data.counts.watched++;
             }
 
             job.color_type = color_map[job.color].type;

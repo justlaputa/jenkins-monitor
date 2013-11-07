@@ -1,7 +1,7 @@
 <table class="table table-hover">
     <tbody>
         {{#each jobs}}
-        <tr class="job {{status}} {{#if in_progress}}in-progress{{/if}}">
+        <tr class="job {{status}} {{#if in_progress}}in-progress{{/if}} {{#if watched}}watched{{/if}}">
             <td class="name span8">
               <span data-href="{{url}}lastBuild" title="{{status}}" class="latest-status {{#if color_type}}text-{{color_type}}{{/if}}">
                 <i class="icon-circle"></i>
@@ -13,8 +13,8 @@
                     <div class="bar" style="width: 30%;"></div>
                 </div>
             </td>
-            <td class="tools span1">
-                <span class="watch {{#unless watched}}hide{{/unless}}">
+            <td class="watch span1">
+                <span>
                     <a href="#" class="watch-btn"><i class="icon-eye-open"></i></a>
                 </span>
             </td>

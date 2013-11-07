@@ -150,10 +150,15 @@
         chrome.tabs.create({url: $(this).data('href')});
     });
 
-    $(document).on('mouseenter mouseleave', "#job-list tr.job", function(e) {
-        var watchBar = $(this).find('td.tools .watch');
+    $(document).on('click', '#job-list td.watch .watch-btn', function() {
+        var job = $(this).closest('.job'),
+        jobName = job.find('td.name span:last').text();
 
-        watchBar.toggleClass('hide', e.type === 'mouseleave');
+        job.toggleClass('watched');
+
+        chrome.runtime.getBackgroundPage(function(backend) {
+            backend.toggleWatch(jobName, job.hasClass('watched'));
+        });
     });
 
     function showJenkinsJobs(data) {

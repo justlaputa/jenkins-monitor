@@ -240,6 +240,34 @@
         refresh();
     };
 
+    window.toggleWatch = function(jobName, watch) {
+        console.log('toggle watch for: ', jobName);
+
+        retrieveData('jenkins_jobs', function(data) {
+            var found = false;
+
+            data.jobs.forEach(function(job) {
+                if (job.name === jobName) {
+                    found = true;
+
+                    console.log('found job, watched: ', job.watched);
+
+                    if (watch === undefined) {
+                        job.watched = !job.watched;
+                    } else {
+                        job.watched = !!watch;
+                    }
+                    return false;
+                }
+                return true;
+            });
+
+            if (found) {
+                storeData('jenkins_jobs', data);
+            }
+        });
+    };
+
     //compatibility api
     window.getData = function(callback) {
         chrome.storage.local.get('jenkins_jobs', function(items) {

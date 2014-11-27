@@ -3,6 +3,11 @@ Jenkins Monitor
 
 Yet another chrome extension for daily use of [Jenkins CI](http://jenkins-ci.org/)
 
+Install
+=======
+
+Install from Chrome webstore: [jenkins-monitor](https://chrome.google.com/webstore/detail/jenkins-monitor/chhebdmlkojbdgadopnedfmoapbeiofi)
+
 Features
 =======
 

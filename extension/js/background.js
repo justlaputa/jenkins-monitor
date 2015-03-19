@@ -22,6 +22,10 @@
         chrome.browserAction.setBadgeText({ text: text });
     }
 
+    function setIconColor(color) {
+        chrome.browserAction.setBadgeBackgroundColor({color: color});
+    }
+
     function showInactiveIcon() {
         setIcon('options');
     }
@@ -156,7 +160,7 @@
 
         jenkins.getJobs(function(err, data) {
             if (err) {
-                console.log('fali to fetch remote data');
+                console.log('failed to fetch remote data');
 
                 setIcon('fail');
 
@@ -165,6 +169,17 @@
                 console.log('got data from remote: ', data);
 
                 setIcon(data.jobs.length.toString());
+                var failed = false;
+                $.each(data.jobs,function(index,object){
+                    if(object.color == "red"){
+                        failed = true;
+                    }
+                })
+                if (failed == true){
+                    setIconColor('#FF0000');
+                } else {
+                    setIconColor('#00FF00');
+                }
 
                 data.timestamp = new Date();
 

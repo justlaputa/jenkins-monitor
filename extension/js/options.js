@@ -55,11 +55,14 @@
         });
     });
 
-    $(document).on('click', '#add-jenkins', function(event) {
+    $(document).on('click', '.btn.add-jenkins', function(event) {
       event.preventDefault();
       event.stopPropagation();
 
-      var newControl = $('#options-form .control-group.jenkins-url .controls:eq(0)').clone();
+      var newControl = $('#options-form .control-group.jenkins-url .controls:eq(0)')
+          .clone();
+
+      newControl.find('a.add-jenkins').remove();
       newControl.find('input').val("");
       newControl.appendTo('#options-form .control-group.jenkins-url');
     });

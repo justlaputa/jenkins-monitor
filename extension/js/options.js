@@ -55,6 +55,15 @@
         });
     });
 
+    $(document).on('click', '#add-jenkins', function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      var newControl = $('#options-form .control-group.jenkins-url .controls:eq(0)').clone();
+      newControl.find('input').val("");
+      newControl.appendTo('#options-form .control-group.jenkins-url');
+    });
+
     $(function() {
         restore_options();
     });

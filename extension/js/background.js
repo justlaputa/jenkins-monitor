@@ -4,7 +4,7 @@
 
     options = null,
 
-    jenkins = null,
+    jenkins = [],
 
     notification = null,
 
@@ -207,7 +207,7 @@
         getOptions(function(options) {
             var refresh_time;
 
-            if (!options['jenkins-url']) {
+            if (!options['jenkins-url'] || options['jenkins-url'].length === 0) {
                 console.log('no option set for jenkins url');
                 setIcon('no');
                 return;
@@ -215,7 +215,9 @@
 
             console.log('get options: ', options);
 
-            jenkins = new Jenkins(options['jenkins-url']);
+            jenkins = options['jenkins-url'].map(function(url) {
+              return new Jenkins(url);
+            });
 
             requestData();
 

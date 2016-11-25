@@ -16,8 +16,12 @@
   <form class="form-horizontal" id="options-form">
     <fieldset>
       <legend>Options</legend>
-      <div class="control-group">
-        <label class="control-label" for="jenkins-url">Jenkins Url: </label>
+      <div class="control-group jenkins-url">
+        <label class="control-label" for="jenkins-url">Jenkins Url:
+          <a id="add-jenkins" class="btn btn-small btn-success" href="">
+            <i class="icon-plus"></i>
+          </a>
+        </label>
         <div class="controls">
           <input type="text" name="jenkins-url" placeholder="Input Jenkins URL here">
           <span class="save-info"></span>

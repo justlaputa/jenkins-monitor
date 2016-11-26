@@ -64,7 +64,7 @@
 
     for (i = 0; i < jobsData.length; i++) {
       hash[jobsData[i].name] = {
-        color: jobsData[i].color,
+        color: jobsData[i].color || 'unknown',
         url: jobsData[i].url,
         seq: i
       };

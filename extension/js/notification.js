@@ -13,10 +13,8 @@
   }
 
   function showNotification(img, title, content, delay, onClickUrl) {
-    var notification = webkitNotifications.createNotification(img, title, content);
-
     var options = {
-      type: 'image',
+      type: 'basic',
       iconUrl: img,
       title: title,
       message: content,

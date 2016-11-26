@@ -241,6 +241,7 @@
   function refresh() {
     getOptions(function(options) {
       var refresh_time;
+      var jenkins_urls;
 
       if (!options['jenkins-url'] || options['jenkins-url'].length === 0) {
         console.log('no option set for jenkins url');
@@ -248,9 +249,14 @@
         return;
       }
 
+      jenkins_urls = options['jenkins-url'];
+      if (typeof jenkins_urls === 'string') {
+        jenkins_urls = [jenkins_urls];
+      }
+
       console.log('get options: ', options);
 
-      jenkins = options['jenkins-url'].map(function(url) {
+      jenkins = jenkins_urls.map(function(url) {
         return new Jenkins(url);
       });
 

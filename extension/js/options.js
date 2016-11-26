@@ -32,6 +32,9 @@
 
         if (name === 'jenkins-url') {
           var urls = options['jenkins-url'];
+          if (typeof urls === 'string') {
+            urls = [urls];
+          }
           for (var i = 0; i < urls.length; i++) {
             if (i === 0) {
               $('#options-form input[name="jenkins-url"]:eq(0)').val(urls[i]);

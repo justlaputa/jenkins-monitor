@@ -1,38 +1,40 @@
 (function(window, $) {
-    var query = {
-        jobs: 'api/json?tree=jobs[color,name,url]'
-    };
+  var query = {
+    jobs: 'api/json?tree=jobs[color,name,url]'
+  };
 
-    function Jenkins(url) {
-        this.url = url;
-    }
+  function Jenkins(url) {
+    this.url = url;
+  }
 
-    Jenkins.prototype.setUrl = function(url) {
-        this.url = url;
-    };
+  Jenkins.prototype.setUrl = function(url) {
+    this.url = url;
+  };
 
-    //async function for getting all jenkins job data
-    //callback(err, data)
-    Jenkins.prototype.getJobs = function(callback) {
+  //async function for getting all jenkins job data
+  //callback(err, data)
+  Jenkins.prototype.getJobs = function(callback) {
+    var that = this;
+    $.ajax(this.url + query.jobs).then(function(data) {
+      data['jenkins_url'] = that.url;
 
-        $.ajax(this.url + query.jobs).then(function(data) {
+      console.log('get jenkins data: ', data);
 
-            console.log('get jenkins data: ', data);
 
-            if (callback) {
-                callback(null, data);
-            }
+      if (callback) {
+        callback(null, data);
+      }
 
-        }, function(jqXHR, status, error) {
+    }, function(jqXHR, status, error) {
 
-            console.log('request for jobs fails: %s, %s', status, error);
+      console.log('request for jobs fails: %s, %s', status, error);
 
-            if (callback) {
-                callback(error, null);
-            }
-        });
-    };
+      if (callback) {
+        callback(error, null);
+      }
+    });
+  };
 
-    window.Jenkins = Jenkins;
+  window.Jenkins = Jenkins;
 
 } (window, jQuery) );

@@ -1,24 +1,33 @@
-<table class="table table-hover">
+<div class="jenkins-list">
+  {{#each this}}
+  <div class="jenkins-url">
+    <a href="{{jenkins_url}}">{{jenkins_url}}</a>
+  </div>
+  <table class="table table-hover">
     <tbody>
-        {{#each jobs}}
-        <tr class="job {{status}} {{#if in_progress}}in-progress{{/if}} {{#if watched}}watched{{/if}}">
-            <td class="name span8">
-              <span data-href="{{url}}lastBuild" title="{{status}}" class="latest-status {{#if color_type}}text-{{color_type}}{{/if}}">
-                <i class="icon-circle"></i>
-              </span>
-              <span data-href="{{url}}">{{name}}</span>
-            </td>
-            <td class="build span3">
-                <div class="progress progress-striped active {{#unless in_progress}}hide{{/unless}}">
-                    <div class="bar" style="width: 30%;"></div>
-                </div>
-            </td>
-            <td class="watch span1">
-                <span>
-                    <a href="#" class="watch-btn"><i class="icon-eye-open"></i></a>
-                </span>
-            </td>
-        </tr>
-        {{/each}}
+      {{#each jobs}}
+      <tr class="job {{status}} {{#if in_progress}}in-progress{{/if}} {{#if watched}}watched{{/if}}">
+        <td class="name span8">
+          <span data-href="{{url}}lastBuild" title="{{status}}" class="latest-status {{#if color_type}}text-{{color_type}}{{/if}}">
+            <i class="icon-circle"></i>
+          </span>
+          <span data-href="{{url}}">{{name}}</span>
+        </td>
+        <td class="build span3">
+          <div class="progress progress-striped active {{#unless in_progress}}hide{{/unless}}">
+            <div class="bar" style="width: 30%;"></div>
+          </div>
+        </td>
+        <!--
+        <td class="watch span1">
+          <span>
+            <a href="#" class="watch-btn"><i class="icon-eye-open"></i></a>
+          </span>
+        </td>
+        -->
+      </tr>
+      {{/each}}
     </tbody>
-</table>
+  </table>
+  {{/each}}
+</div>

@@ -24,13 +24,25 @@
 
     chrome.storage.local.get('options', function(items) {
       var options = items['options'],
-      name,
-      val;
+          name,
+          val;
 
       for (name in options) {
         val = options[name];
 
-        $('#options-form input[name="' + name + '"]').val(val);
+        if (name === 'jenkins-url') {
+          var urls = options['jenkins-url'];
+          for (var i = 0; i < urls.length; i++) {
+            if (i === 0) {
+              $('#options-form input[name="jenkins-url"]:eq(0)').val(urls[i]);
+            } else {
+              addJenkinsUrlInputBox(urls[i]);
+            }
+          }
+
+        } else {
+          $('#options-form input[name="' + name + '"]').val(val);
+        }
       }
     });
   }
@@ -46,6 +58,16 @@
     });
 
     return urls;
+  }
+
+  function addJenkinsUrlInputBox(url) {
+    var inputText = url || "";
+    var newControl = $('#options-form .control-group.jenkins-url .controls:eq(0)')
+        .clone();
+
+    newControl.find('a.add-jenkins').remove();
+    newControl.find('input').val(inputText);
+    newControl.appendTo('#options-form .control-group.jenkins-url');
   }
 
   $(document).on('change', '#options-form input', function() {
@@ -76,12 +98,7 @@
     event.preventDefault();
     event.stopPropagation();
 
-    var newControl = $('#options-form .control-group.jenkins-url .controls:eq(0)')
-      .clone();
-
-    newControl.find('a.add-jenkins').remove();
-    newControl.find('input').val("");
-    newControl.appendTo('#options-form .control-group.jenkins-url');
+    addJenkinsUrlInputBox();
   });
 
   $(function() {

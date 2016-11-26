@@ -58,6 +58,10 @@
         'notbuilt': {
             status: 'aborted',
             type: ''
+        },
+        'unknown': {
+            status: 'success',
+            type: ''
         }
     };
 

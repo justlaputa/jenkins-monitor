@@ -51,7 +51,7 @@ $(function() {
   refreshTimerId = null;
 
   function processData(jenkins_data) {
-    jenkins_data.counts = {
+    var counts = {
       'total': 0,
       'aborted': 0,
       'succeed': 0,
@@ -68,22 +68,23 @@ $(function() {
 
         if (!job.color) job.color = 'unknown';
         if (job.color.search(/_anime$/) !== -1) {
-          jenkins_data.counts.in_progress++;
+          counts.in_progress++;
           job.in_progress = true;
           job.color = job.color.replace('_anime', '');
         }
 
         if (job.watched) {
-          jenkins_data.counts.watched++;
+          counts.watched++;
         }
 
         job.color_type = color_map[job.color].type;
         job.status = color_map[job.color].status;
 
-        jenkins_data.counts[job.status]++;
-        jenkins_data.counts.total++;
+        counts[job.status]++;
+        counts.total++;
       });
     });
+    return counts;
   }
 
   function showJobsInStatus(status) {
@@ -105,9 +106,9 @@ $(function() {
     $('#job-list').toggleClass('hide', show === false);
   }
 
-  function renderJenkinsJobs(data) {
+  function renderJenkinsJobs(data, counts) {
     $('#job-list').html(templates['joblist'](data));
-    $('#jobs-toolbar').html(templates['jobstoolbar'](data.counts));
+    $('#jobs-toolbar').html(templates['jobstoolbar'](counts));
   }
 
   function showLoadingJenkinsFail() {
@@ -174,12 +175,12 @@ $(function() {
 
   function showJenkinsJobs(data) {
     console.log(data);
-    processData(data);
+    var counts = processData(data);
 
     showLoadingSpin(false);
     showJobList();
 
-    renderJenkinsJobs(data);
+    renderJenkinsJobs(data, counts);
   }
 
   // get data from backend and register event listener

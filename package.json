@@ -1,7 +1,7 @@
 {
   "name": "chrome-jenkins",
   "description": "google-chrome extension of Jenkins",
-  "version": "0.1.4",
+  "version": "1.0.0-pre",
   "private": true,
   "dependencies": {},
   "engines": {

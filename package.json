@@ -5,13 +5,17 @@
   "private": true,
   "dependencies": {},
   "engines": {
-    "node": "0.8.x",
-    "npm": "1.2.x"
+    "node": "6.9.x",
+    "npm": "3.10.x"
   },
   "devDependencies": {
-    "grunt": "0.4.x",
-    "grunt-contrib-handlebars": "0.5.x",
-    "grunt-contrib-watch": "0.3.x",
-    "grunt-contrib-copy": "~0.4.1"
+    "babel-core": "^6.18.2",
+    "babel-loader": "^6.2.8",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.18.0",
+    "copy-webpack-plugin": "^4.0.1",
+    "webpack": "^1.13.3"
+  },
+  "scripts": {
+    "build": "webpack"
   }
 }

@@ -1,0 +1,29 @@
+{
+  "name": "Jenkins Monitor",
+  "version": "1.0.0",
+  "manifest_version": 2,
+
+  "description": "Chrome Extensions to monitor your jenkins ci.",
+  "homepage_url": "https://github.com/justlaputa/jenkins-monitor",
+  "minimum_chrome_version": "54",
+
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+
+  "permissions": [
+    "alarms",
+    "storage",
+    "notifications",
+    "http://*/",
+    "https://*/"
+  ],
+
+  "background": {
+    "scripts": ["background.bundle.js"],
+    "persistent": false
+
+  }
+}

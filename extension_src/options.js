@@ -3,7 +3,7 @@
 * common function to manage extension options.
 */
 
-import Storage from './Storage';
+import Storage from './storage';
 
 class Options {
 

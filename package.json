@@ -3,7 +3,10 @@
   "description": "google-chrome extension of Jenkins",
   "version": "1.0.0-pre",
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1"
+  },
   "engines": {
     "node": "6.9.x",
     "npm": "3.10.x"
@@ -12,6 +15,7 @@
     "babel-core": "^6.18.2",
     "babel-loader": "^6.2.8",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
     "copy-webpack-plugin": "^4.0.1",
     "webpack": "^1.13.3"
   },

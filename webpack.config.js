@@ -7,7 +7,8 @@ module.exports = {
   context: src_dir,
 
   entry: {
-    background: ['./background/background.js', './options.js', './storage.js']
+    background: ['./background/background.js', './options.js', './storage.js'],
+    popup: ['./popup/popup.js']
   },
 
   output: {
@@ -18,7 +19,8 @@ module.exports = {
   plugins: [
     new CopyWebpackPlugin([
       { from: 'manifest.json' },
-      { from: 'icons/', to: 'icons/' }
+      { from: 'icons/*' },
+      { from: 'popup/popup.html' }
     ])
   ],
 
@@ -26,9 +28,10 @@ module.exports = {
     loaders: [
       {
         loader: 'babel-loader',
-        test: /\.js$/,
+        test: /\.jsx?$/,
         query: {
-          plugins: ['transform-es2015-modules-commonjs']
+          plugins: ['transform-es2015-modules-commonjs'],
+          presets: ['react']
         }
       }
     ]

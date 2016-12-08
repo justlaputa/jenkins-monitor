@@ -86,17 +86,22 @@ function extractJenkinsId(alarmName) {
   return alarmName.substring('jenkins-'.length);
 }
 
+function getJenkinsUrlById(id) {
+  if (!JenkinsTargetsHash[jenkinsId]) {
+    console.log('can not find jenkins config for id: %s', jenkinsId);
+    return "";
+  }
+
+  return JenkinsTargetsHash[jenkinsId];
+}
+
 function getJenkinsJobsApiUrl(jenkinsUrl) {
   return jenkinsUrl + 'api/json?tree=jobs[color,name,url]';
 }
 
-function fetchJenkinsData(jenkinsId) {
-  if (!JenkinsTargetsHash[jenkinsId]) {
-    console.log('can not find jenkins config for id: %s', jenkinsId);
-    return;
-  }
+function fetchJenkinsData(jenkinsUrl) {
 
-  let fetchUrl = getJenkinsJobsApiUrl(JenkinsTargetsHash[jenkinsId].url);
+  let fetchUrl = getJenkinsJobsApiUrl(jenkinsUrl);
 
   fetch(fetchUrl)
     .then(status)
@@ -120,15 +125,25 @@ function fetchJenkinsData(jenkinsId) {
   }
 }
 
+function startTest() {
+  chrome.alarms.create('test-start', {
+    periodInMinutes: 0.2
+  });
+}
+
 chrome.alarms.onAlarm.addListener((alarm) => {
   console.log('alarm fired: %s', alarm.name);
   if (alarm.name.startsWith('jenkins-')) {
     console.debug('got jenkins refresh alarm, start request jenkins server...');
 
     let id = extractJenkinsId(alarm.name);
-    fetchJenkinsData(id);
-  } else {
-    console.log('unknown alarm, ignore it');
+    let jenkinsUrl = getJenkinsUrlById(id);
+    fetchJenkinsData(jenkinsUrl);
+  } else if (alarm.name === 'test-start') {
+    console.debug('testing...');
+    console.debug('try to fetch testing jenkins data');
+
+    fetchJenkinsData('https://builds.apache.org/');
   }
 });
 
@@ -139,3 +154,10 @@ if (chrome.runtime && chrome.runtime.onStartup) {
     start();
   });
 }
+
+chrome.management.getSelf((info) => {
+  if (info.installType === 'development') {
+    console.debug('in developer mode, start test...');
+    startTest();
+  }
+});

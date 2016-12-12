@@ -205,9 +205,9 @@
             }
           });
           if (failed == true){
-            setIconColor('#FF0000');
+            setIconColor('#d9534f');
           } else {
-            setIconColor('#00FF00');
+            setIconColor('#5cb85c');
           }
 
           data.timestamp = new Date();

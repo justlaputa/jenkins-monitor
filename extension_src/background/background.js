@@ -127,7 +127,7 @@ function fetchJenkinsData(jenkinsUrl) {
 
 function startTest() {
   chrome.alarms.create('test-start', {
-    periodInMinutes: 0.2
+    periodInMinutes: 0.5
   });
 }
 

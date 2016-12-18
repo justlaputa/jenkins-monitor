@@ -19,11 +19,9 @@ class OptionsForm extends React.Component {
     super()
     this.state = {
       jenkinses: [{
-        url: 'https//test.jenkins.com',
-        refresh: 1
-      },{
-        url: 'https//test-again.jenkins.com',
-        refresh: 10
+        url: 'http://example.jenkins.com',
+        refresh: 5,
+        example: true
       }],
       notifications: {}
     }
@@ -36,8 +34,15 @@ class OptionsForm extends React.Component {
     let oldItem = this.state.jenkinses[index]
     let newItem = Object.assign({}, oldItem, value)
 
+    //make a copy of current jenkins settings, prevent mutate existing state
     let newJenkinses = [...this.state.jenkinses]
+
+    if (newItem.example) {
+      delete newItem['example']
+    }
+
     newJenkinses.splice(index, 1, newItem)
+
     console.debug('set state to new jenkinses state: %O', newJenkinses)
     this.setState({
       jenkinses: newJenkinses,
@@ -67,7 +72,8 @@ class OptionsForm extends React.Component {
 
 const JenkinsUrls = function(props) {
   const urlList = props.jenkinses.map((jenkins, index) =>
-    <div key={index} className="jenkins-url">
+    <div key={index}
+      className={"jenkins-url " + jenkins.example ? "example" : ""}>
       <input className="jenkins-url" type="text"
         onChange={(event) => props.onChange(index, {url: event.target.value})}
         value={jenkins.url}></input>

@@ -4,7 +4,9 @@
   "version": "1.0.0-pre",
   "private": true,
   "dependencies": {
+    "bootstrap": "^3.3.7",
     "react": "^15.4.1",
+    "react-bootstrap": "^0.30.7",
     "react-dom": "^15.4.1"
   },
   "engines": {
@@ -17,9 +19,17 @@
     "babel-plugin-transform-es2015-modules-commonjs": "^6.18.0",
     "babel-preset-react": "^6.16.0",
     "copy-webpack-plugin": "^4.0.1",
-    "webpack": "^1.13.3"
+    "css-loader": "^0.26.1",
+    "file-loader": "^0.9.0",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.13.3",
+    "webpack-dev-server": "^1.16.2"
   },
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "build-dev": "webpack -d",
+    "dev-server": "webpack-dev-server --progress --colors",
+    "watch": "webpack --progress --colors --watch"
   }
 }

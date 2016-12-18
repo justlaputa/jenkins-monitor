@@ -8,7 +8,8 @@ module.exports = {
 
   entry: {
     background: ['./background/background.js', './options.js', './storage.js'],
-    popup: ['./popup/popup.js']
+    popup: ['./popup/popup.js'],
+    options: ['./options/options.js', './options.js', './storage.js']
   },
 
   output: {
@@ -20,19 +21,48 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: 'manifest.json' },
       { from: 'icons/*' },
-      { from: 'popup/popup.html' }
+      { from: 'popup/popup.html' },
+      { from: 'options/options.html' }
     ])
   ],
 
   module: {
     loaders: [
       {
-        loader: 'babel-loader',
         test: /\.jsx?$/,
+        loader: 'babel-loader',
         query: {
           plugins: ['transform-es2015-modules-commonjs'],
           presets: ['react']
         }
+      },
+      {
+        test: /\.css$/,
+        loader: "style-loader!css-loader"
+      },
+      {
+        test: /\.png$/,
+        loader: "url-loader?limit=100000"
+      },
+      {
+        test: /\.jpg$/,
+        loader: "file-loader"
+      },
+      {
+        test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url?limit=10000&mimetype=application/font-woff'
+      },
+      {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url?limit=10000&mimetype=application/octet-stream'
+      },
+      {
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'file'
+      },
+      {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url?limit=10000&mimetype=image/svg+xml'
       }
     ]
   },

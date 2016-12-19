@@ -6,20 +6,24 @@
 
 class Storage {
 
-  constructor() {}
+  constructor() {
+    this.local = chrome.storage.local
+    this.sync = chrome.storage.sync
+  }
 
   /**
-   * get and object by key from local storage
+   * get an object by key from the chrome storage
    * @param {string} key of the stored item
+   * @param {Object} storage the storage object used to retrieve data, default use chrome local storage
    * @return {Promise} a promise object resolves to the value of the stored item
    */
-  get(key) {
+  get(key, storage = this.local) {
     return new Promise((resolve, reject) => {
       if (!key || key === '') {
         console.warn('passing an empty or null key', key)
         resolve(null)
       } else {
-        chrome.storage.local.get(key, (items) => {
+        storage.get(key, (items) => {
           if (items && items[key]) {
             resolve(items[key])
           } else {
@@ -32,12 +36,21 @@ class Storage {
   }
 
   /**
+   * get an object by key from the chrome sync storage
+   * @param {string} key key of the object to get
+   * @return {Promise} a promise object resolves to the object value
+   */
+  getSync(key) {
+    return this.get(key, this.sync)
+  }
+
+  /**
    * store and object into local storage with {key}
    * @param {string} key the key used to store the object
    * @param {Object} value value of the object to store
    * @return {Promise} a promise object resolves to the stored item or rejects on failure
    */
-  set(key, value) {
+  set(key, value, storage = this.local) {
     return new Promise((resolve, reject) => {
       if (!key || key === '') {
         console.error('try to store value with an empty or null key, skip it')
@@ -48,12 +61,22 @@ class Storage {
         }
         let item = {}
         item[key] = value
-        chrome.storage.local.set(item, () => {
+        storage.set(item, () => {
           console.debug('store item success')
           resolve(item)
         })
       }
     })
+  }
+
+  /**
+   * store and object into chrome sync storage with {key}
+   * @param {string} key the key used to store the object
+   * @param {Object} value value of the object to store
+   * @return {Promise} a promise object resolves to the stored item or rejects on failure
+   */
+  setSync(key, value) {
+    return this.set(key, value, this.sync)
   }
 }
 

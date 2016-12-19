@@ -25,11 +25,19 @@ class Options {
   }
 
   getJenkins() {
-    return null;
+    return Storage.getSync(JENKINS_KEY)
   }
 
   getNotification() {
-    return null;
+    return Storage.getSync(NOTIFICATION_KEY)
+  }
+
+  setJenkins() {
+    return Storage.setSync(JENKINS_KEY)
+  }
+
+  setNotification() {
+    return Storage.setSync(NOTIFICATION_KEY)
   }
 }
 

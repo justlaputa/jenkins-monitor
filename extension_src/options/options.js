@@ -13,6 +13,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Options from '../options'
 
 class OptionsForm extends React.Component {
   constructor() {
@@ -25,8 +26,30 @@ class OptionsForm extends React.Component {
       }],
       notifications: {}
     }
+
+    this.initState()
+
     this.onJenkinsOptionsChange = this.onJenkinsOptionsChange.bind(this)
     this.onNotificationOptionsChange = this.onNotificationOptionsChange.bind(this)
+    this.onFocusOut = this.onFocusOut.bind(this)
+  }
+
+  initState() {
+    this.getOptionsFromStorage().then((options) => {
+      console.debug('got options from storage: %O', options)
+      this.setState(options)
+    }, () => {
+      console.log('no existing options, use default')
+    })
+  }
+
+  getOptionsFromStorage() {
+    return Options.getAll()
+  }
+
+  storeOptionsToStorage() {
+    console.debug('store current options to storage: %O', this.state)
+    return Options.setAll(this.state)
   }
 
   onJenkinsOptionsChange(index, value) {
@@ -54,16 +77,24 @@ class OptionsForm extends React.Component {
     console.log('get notification change', value)
   }
 
+  onFocusOut() {
+    this.storeOptionsToStorage().then(() => {
+      console.log('store options to storage success')
+    })
+  }
+
   render() {
     return (
       <div className="options-form">
         <JenkinsUrls
           jenkinses={this.state.jenkinses}
-          onChange={this.onJenkinsOptionsChange}>
+          onChange={this.onJenkinsOptionsChange}
+          onBlur={this.onFocusOut}>
         </JenkinsUrls>
         <NotificationOptions
           notifications={this.state.notifications}
-          onChange={this.onNotificationOptionsChange}>
+          onChange={this.onNotificationOptionsChange}
+          onBlur={this.onFocusOut}>
         </NotificationOptions>
       </div>
     )
@@ -76,6 +107,7 @@ const JenkinsUrls = function(props) {
       className={"jenkins-url " + jenkins.example ? "example" : ""}>
       <input className="jenkins-url" type="text"
         onChange={(event) => props.onChange(index, {url: event.target.value})}
+        onBlur={props.onBlur}
         value={jenkins.url}></input>
       <input className="refresh-time" type="number"
         min="5" max="30" step="5"

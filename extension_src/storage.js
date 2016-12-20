@@ -24,8 +24,13 @@ class Storage {
         resolve(null)
       } else {
         storage.get(key, (items) => {
-          if (items && items[key]) {
-            resolve(items[key])
+          if (items) {
+            if (items[key]) {
+              resolve(items[key])
+            } else {
+              console.warn('no object for key:[%s] in storage', key)
+              resolve(null)
+            }
           } else {
             console.error('failed to get item for key[%s] in local storage', key)
             reject()
@@ -48,7 +53,7 @@ class Storage {
    * store and object into local storage with {key}
    * @param {string} key the key used to store the object
    * @param {Object} value value of the object to store
-   * @return {Promise} a promise object resolves to the stored item or rejects on failure
+   * @return {Promise} a promise object resolves if store success, or rejects on failure
    */
   set(key, value, storage = this.local) {
     return new Promise((resolve, reject) => {
@@ -57,13 +62,13 @@ class Storage {
         reject()
       } else {
         if (!value) {
-          console.warn('try to store an null or undefined value for key[%s]', value, key)
+          console.warn('try to store an null or undefined value for key[%s]', key)
         }
         let item = {}
         item[key] = value
         storage.set(item, () => {
           console.debug('store item success')
-          resolve(item)
+          resolve()
         })
       }
     })
@@ -73,7 +78,7 @@ class Storage {
    * store and object into chrome sync storage with {key}
    * @param {string} key the key used to store the object
    * @param {Object} value value of the object to store
-   * @return {Promise} a promise object resolves to the stored item or rejects on failure
+   * @return {Promise} a promise object resolves if store success, or rejects on failure
    */
   setSync(key, value) {
     return this.set(key, value, this.sync)

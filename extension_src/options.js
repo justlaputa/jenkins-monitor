@@ -5,23 +5,32 @@
 
 import Storage from './storage';
 
-const JENKINS_KEY = 'options.jenkins'
-const NOTIFICATION_KEY = 'options.notification'
+const JENKINS_KEY = 'options.jenkinses'
+const NOTIFICATION_KEY = 'options.notifications'
 
 class Options {
 
   constructor() {}
 
   getAll() {
-    return Promise.all(
-      Storage.getSync(JENKINS_KEY),
-      Storage.getSync(NOTIFICATION_KEY)
-    ).then((j, n) => {
+    return Promise.all([
+      this.getJenkins(),
+      this.getNotification()
+    ]).then((result) => {
       return {
-        jenkins: j,
-        notification: n
+        jenkinses: result[0],
+        notifications: result[1]
       }
+    }).catch(() => {
+      console.warn('could not get all options')
     })
+  }
+
+  setAll(data) {
+    return Promise.all([
+      this.setJenkins(data['jenkinses']),
+      this.setNotification(data['notifications'])
+    ])
   }
 
   getJenkins() {
@@ -32,12 +41,12 @@ class Options {
     return Storage.getSync(NOTIFICATION_KEY)
   }
 
-  setJenkins() {
-    return Storage.setSync(JENKINS_KEY)
+  setJenkins(value) {
+    return Storage.setSync(JENKINS_KEY, value)
   }
 
-  setNotification() {
-    return Storage.setSync(NOTIFICATION_KEY)
+  setNotification(value) {
+    return Storage.setSync(NOTIFICATION_KEY, value)
   }
 }
 

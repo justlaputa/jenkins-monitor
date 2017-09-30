@@ -38,8 +38,6 @@ class OptionsForm extends React.Component {
     this.getOptionsFromStorage().then((options) => {
       console.debug('got options from storage: %O', options)
       this.setState(options)
-    }, () => {
-      console.log('no existing options, use default')
     })
   }
 
